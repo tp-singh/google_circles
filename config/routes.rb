@@ -1,4 +1,8 @@
 GoogleCircles::Application.routes.draw do
+  resources :units
+
+  resources :employees
+
   get "home/index"
   
   get '/signout' => 'sessions#destroy', as: :signout

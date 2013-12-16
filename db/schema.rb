@@ -11,10 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131216082636) do
+ActiveRecord::Schema.define(version: 20131216092230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "employees", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.boolean  "is_active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "o_auth2_credentials", force: true do |t|
     t.string   "name"
@@ -25,6 +34,13 @@ ActiveRecord::Schema.define(version: 20131216082636) do
   end
 
   add_index "o_auth2_credentials", ["user_id"], name: "index_o_auth2_credentials_on_user_id", using: :btree
+
+  create_table "units", force: true do |t|
+    t.string   "name"
+    t.integer  "circle_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "uid"
