@@ -1,5 +1,8 @@
 GoogleCircles::Application.routes.draw do
-  resources :units
+  resources :units do 
+    get :add_employee, on: :member
+    get :remove_employee, on: :member
+  end
 
   resources :employees
 

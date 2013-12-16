@@ -28,6 +28,18 @@ class UnitsController < ApplicationController
 
     respond_to do |format|
       if @unit.save
+        Unit.transaction do
+          auth = Signet::Rails::Factory.create_from_env :google, request.env
+          client = Google::APIClient.new
+          client.authorization = auth
+          plusDomain = client.discovered_api('plusDomains')
+          @result = client.execute(:api_method => plusDomain.circles.insert,
+            :parameters => {'userId' => 'me'},
+            :body =>MultiJson.dump('displayName' => @unit.name),
+            :headers => {'Content-Type' => 'application/json'}
+          )
+          @unit.update_column(:circle_id, @result.data.id)
+        end
         format.html { redirect_to @unit, notice: 'Unit was successfully created.' }
         format.json { render action: 'show', status: :created, location: @unit }
       else
