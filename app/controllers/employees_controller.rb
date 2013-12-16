@@ -62,7 +62,25 @@ class EmployeesController < ApplicationController
   end
   
   def toggle_status
-    @
+    if @employee.is_active?
+      if @employee.units.present?
+        Employee.transaction do
+          auth = Signet::Rails::Factory.create_from_env :google, request.env
+          client = Google::APIClient.new
+          client.authorization = auth
+          plusDomain = client.discovered_api('plusDomains')
+          @employee.units.each do |unit|
+            @result = client.execute(
+              :api_method => plusDomain.circles.remove_people,
+              :parameters => {'circleId' => unit.circle_id, 'email' => @employee.email}
+            )
+            @employee.units.delete unit
+          end
+        end
+      end
+    end
+    @employee.toggle! :is_active
+    redirect_to :back
   end
 
   private
