@@ -1,5 +1,4 @@
 class HomeController < ApplicationController
-  layout false
   def index
     if logged_in?
       auth = Signet::Rails::Factory.create_from_env :google, request.env
