@@ -42,10 +42,12 @@
       <div class="navbar-inner">
         <div class="container">
           <%= link_to "Google Circles", root_path, class: 'brand' %>
-          <ul class="nav">
-            <li class="<%= request.path.starts_with?('/employees') ? 'active' : ''%>"><%= link_to "Employees", employees_path %></li>
-            <li class="<%= request.path.starts_with?('/units') ? 'active' : ''%>"><%= link_to "Units", units_path %></li>
-          </ul>
+          <% if logged_in? %>
+            <ul class="nav">
+              <li class="<%= request.path.starts_with?('/employees') ? 'active' : ''%>"><%= link_to "Employees", employees_path %></li>
+              <li class="<%= request.path.starts_with?('/units') ? 'active' : ''%>"><%= link_to "Units", units_path %></li>
+            </ul>
+          <% end %>
           <ul class="nav pull-right">
             <li class="vertical-divider"></li>
             <li>
