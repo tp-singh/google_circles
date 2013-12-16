@@ -14,6 +14,7 @@ gem "twitter-bootstrap-rails"
 group :doc do
   gem 'sdoc', require: false
 end
-
+gem 'google-api-client', :require => 'google/api_client'
+gem 'signet-rails', '>= 0.0.6'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
