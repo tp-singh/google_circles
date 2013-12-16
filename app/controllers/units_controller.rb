@@ -1,5 +1,5 @@
 class UnitsController < ApplicationController
-  before_action :set_unit, only: [:show, :edit, :update, :destroy]
+  before_action :set_unit, only: [:show, :edit, :update, :destroy, :remove_employee, :add_employee]
 
   # GET /units
   # GET /units.json
@@ -25,7 +25,6 @@ class UnitsController < ApplicationController
   # POST /units.json
   def create
     @unit = Unit.new(unit_params)
-
     respond_to do |format|
       if @unit.save
         Unit.transaction do
@@ -72,7 +71,39 @@ class UnitsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  
+  def remove_employee
+    employee = Employee.find(params[:employee_id])
+    Unit.transaction do
+      auth = Signet::Rails::Factory.create_from_env :google, request.env
+      client = Google::APIClient.new
+      client.authorization = auth
+      plusDomain = client.discovered_api('plusDomains')
+      @result = client.execute(
+        :api_method => plusDomain.circles.remove_people,
+        :parameters => {'circleId' => @unit.circle_id, 'email' => employee.email}
+      )
+      @unit.employees.delete employee
+    end
+    redirect_to :back
+  end
+  
+  def add_employee
+    employee = Employee.find(params[:employee_id])
+    Unit.transaction do
+      auth = Signet::Rails::Factory.create_from_env :google, request.env
+      client = Google::APIClient.new
+      client.authorization = auth
+      plusDomain = client.discovered_api('plusDomains')
+        @result = client.execute(
+          :api_method => plusDomain.circles.add_people,
+          :parameters => {'circleId' => @unit.circle_id, 'email' => employee.email}
+        )
+      @unit.employees << employee
+    end
+    redirect_to :back
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_unit

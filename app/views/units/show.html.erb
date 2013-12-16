@@ -31,7 +31,23 @@
 
 <div class="well">
 	<h4>Employees in <%= @unit.name.camelize %></h4>
-	<%= link_to content_tag(:i, " Add Employee", class: 'icon-plus'), add_employee_unit_path(@unit), class: 'btn btn-success pull-right'%>
+	<div class = 'modal hide fade' id= 'employe'>
+		<div class='modal-header'>
+
+	<h3>Add Employee To <%= @unit.name.camelize %></h3>
+	</div>
+	<div class='modal-body'>
+		Select the email Id :
+		<%= form_tag(add_employee_unit_path(@unit)) do %>
+		<%= select_tag "employee_id", options_for_select(Employee.not_in_unit(@unit.id).collect{ |a| [a.email, a.id] }), include_blank: false, class: "account_dropdown"%>
+	</div>
+	<div class='modal-footer'>
+		<%= submit_tag "Add" ,:class => 'btn btn-primary' %>
+		<button class="btn btn-primary" data-dismiss="modal">Cancel</button>
+		<% end %>
+	</div>
+	</div>	
+	<%= link_to content_tag(:i, " Add Employee", class: 'icon-plus'), "#employe", class: 'btn btn-success pull-right toggle-modal btn-mini', :'data-toggle' => 'modal'%>
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -50,7 +66,7 @@
 					<td><%= employee.last_name %></td>
 					<td><%= employee.email %></td>
 					<td>
-					  <%= link_to 'Remove', remove_employee_unit_path(@unit), 
+					  <%= link_to 'Remove', remove_employee_unit_path(@unit,employee_id: employee.id), 
 					              :data => { :confirm => 'Are you sure?'}, 
 					              :class => 'btn btn-mini btn-danger' %>
 					</td>
