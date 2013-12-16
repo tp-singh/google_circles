@@ -1,5 +1,5 @@
 class EmployeesController < ApplicationController
-  before_action :set_employee, only: [:show, :edit, :update, :destroy]
+  before_action :set_employee, only: [:show, :edit, :update, :destroy, :toggle_status]
 
   # GET /employees
   # GET /employees.json
@@ -59,6 +59,10 @@ class EmployeesController < ApplicationController
       format.html { redirect_to employees_url }
       format.json { head :no_content }
     end
+  end
+  
+  def toggle_status
+    @
   end
 
   private
