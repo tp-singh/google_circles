@@ -15,18 +15,12 @@
   <tbody>
     <% @units.each do |unit| %>
       <tr>
-        <td><%= link_to unit.id, unit_path(unit) %></td>
+        <td><%= unit.id %></td>
         <td><%= unit.name %></td>
         <td><%= unit.circle_id %></td>
         <td><%=l unit.created_at %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_unit_path(unit), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      unit_path(unit),
-                      :method => :delete,
-                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                      :class => 'btn btn-mini btn-danger' %>
+          <%= link_to "View Details", unit_path(unit), class: 'btn btn-mini btn-info' %>
         </td>
       </tr>
     <% end %>

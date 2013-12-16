@@ -4,7 +4,9 @@ GoogleCircles::Application.routes.draw do
     get :remove_employee, on: :member
   end
 
-  resources :employees
+  resources :employees do
+    get :toggle_status, on: :member
+  end
 
   get "home/index"
   
